@@ -14,6 +14,18 @@
             
             <div class="flex items-center space-x-2">
                 <SharedColorMode/>
+
+                <NuxtLink to="/auth">
+                    <UButton color="blue" variant="outline"> 
+                        Get it free
+                    </UButton> 
+                </NuxtLink>
+
+                <NuxtLink to="/auth">
+                    <UButton color="blue" variant="soft"> 
+                        Sign In
+                    </UButton> 
+                </NuxtLink>
             </div>
         </div>
     </div>
