@@ -1,9 +1,6 @@
 
 <template>
-    <div>
-        Auth
-    </div>
-
+    <LayoutsMainNavbar/>
     <section>
         <slot/>
     </section>
