@@ -2,34 +2,67 @@
 
 <script setup lang="ts">
     import type { FormError, FormSubmitEvent } from '#ui/types'
+import { ACCOUNT } from '~/libs/appwrite';
+import { useAuthStore } from '~/store/auth.store';
 
 
-defineProps({
-	toggleLogin: {
-		type: Function,
-		required: true,
-	},
-})
+	defineProps({
+		toggleLogin: {
+			type: Function,
+			required: true,
+		},
+	})
+	const toast = useToast();
+	const authStore = useAuthStore();
+	const router = useRouter();
+	const isLoading = ref(false);
+	const error = ref('');
 
-const state = reactive({
-	email: undefined,
-	password: undefined,
-})
+	const state = reactive({
+		email: undefined,
+		password: undefined,
+	})
 
-const validate = (state: any): FormError[] => {
-	const errors = []
-	if (!state.email) errors.push({ path: 'email', message: 'Email is requierd' })
-	if (!state.password) errors.push({ path: 'password', message: 'Password is required' })
-	return errors
-}
+	const validate = (state: any): FormError[] => {
+		const errors = []
+		if (!state.email) errors.push({ path: 'email', message: 'Email is requierd' })
+		if (!state.password) errors.push({ path: 'password', message: 'Password is required' })
+		return errors
+	}
 
-async function onSubmit(event: FormSubmitEvent<any>) {
-	
-}
+	async function onSubmit(event: FormSubmitEvent<any>) {
+		isLoading.value = true;
+		const { email, password } = event.data
+		try{
+			ACCOUNT.createEmailSession(email, password);
+			const response = await ACCOUNT.get(); 
+			authStore.set({
+				email: response.email,
+				id: response.$id,
+				name: response.name,
+				status: response.status,
+			})
+			toast.add({
+				title: "Logged in",
+				description: "You are now logged in"
+			})
+			await router.push('/')
+		}catch(e: any){
+			error.value = e.message;
+			isLoading.value = false;
+		}
+	}
 </script>
 
 <template>
-	
+	<UAlert
+		icon="i-heroicons-command-line"
+    	:description="error"
+    	title="Error"
+		v-if="error"
+		color="red"
+		variant="outline"
+  	/>
 	<UForm
 		:validate="validate"
 		:state="state"
@@ -51,8 +84,11 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 			</span>
 		</div>
 
-		<UButton type="submit" color="blue" class="w-full" block size="lg">
-			Submit
+		<UButton type="submit" color="blue" class="w-full" block size="lg" :disabled="isLoading">
+			<template v-if="isLoading">
+				<Icon name="svg-spinners:3-dots-fade" class="w-5 h-5" />
+			</template>
+			<template v-else>Next</template>
 		</UButton>
 	</UForm>
 </template>
