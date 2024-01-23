@@ -1,10 +1,33 @@
+<script lang="ts" setup>
+    import { ACCOUNT } from '~/libs/appwrite'
+    import { useAuthStore } from '~/store/auth.store';
+    import { useLoading } from '~/store/loading.store';
 
+    const authStore = useAuthStore();
+    const loadingStore = useLoading();
+    onMounted(() => {
+        ACCOUNT.get()
+            .then(response =>
+                authStore.set({
+                    email: response.email,
+                    id: response.$id,
+                    name: response.name,
+                    status: response.status,
+                })
+            )
+            .finally(() => loadingStore.set(false))
+    })
+</script>
 
 <template>
-    <LayoutsMainNavbar/>
-    <section class="min-h-screen bg-white dark:bg-black">
-         
-        <slot/>
-    </section>
+    <UiLoader v-if="loadingStore.isLoading"/>
+
+    <template v-else>
+        <LayoutsMainNavbar/>
+        <section class="min-h-screen bg-white dark:bg-black"> 
+            <slot/>
+        </section>
+    </template>
+   
     
 </template>

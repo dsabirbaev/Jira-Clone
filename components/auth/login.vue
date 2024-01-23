@@ -2,8 +2,8 @@
 
 <script setup lang="ts">
     import type { FormError, FormSubmitEvent } from '#ui/types'
-import { ACCOUNT } from '~/libs/appwrite';
-import { useAuthStore } from '~/store/auth.store';
+	import { ACCOUNT } from '~/libs/appwrite';
+	import { useAuthStore } from '~/store/auth.store';
 
 
 	defineProps({

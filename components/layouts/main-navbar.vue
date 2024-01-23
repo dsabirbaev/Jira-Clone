@@ -1,5 +1,22 @@
-<script setup>
+<script setup lang="ts">
 
+    import { ACCOUNT } from '~/libs/appwrite';
+    import { useAuthStore } from '~/store/auth.store';
+    import { useLoading } from '~/store/loading.store';
+
+
+    const { currentUser, clear } = useAuthStore();
+    const router = useRouter();
+    const loadingStore = useLoading();
+
+
+    const logout = async () => {
+        loadingStore.set(true);
+        await ACCOUNT.deleteSession('current');
+        clear();
+        router.push("/auth");
+        loadingStore.set(false);
+    }
 </script>
 
 <template>
@@ -14,18 +31,32 @@
             
             <div class="flex items-center space-x-2">
                 <SharedColorMode/>
+                <template v-if="currentUser.status">
+                    <UButton color="red" class="font-bold" @click="logout"> 
+                        Log Out
+                    </UButton>   
+                    <NuxtLink to="/documents">
+                        <UButton color="blue" variant="outline" class="font-bold"> 
+                            Documents
+                        </UButton> 
+                    </NuxtLink>
+                       
+                </template>
 
-                <NuxtLink to="/auth">
-                    <UButton color="blue" variant="outline"> 
-                        Get it free
-                    </UButton> 
-                </NuxtLink>
+                <template v-else>
+                    <NuxtLink to="/auth">
+                        <UButton color="blue" variant="outline"> 
+                            Get it free
+                        </UButton> 
+                    </NuxtLink>
 
-                <NuxtLink to="/auth">
-                    <UButton color="blue" variant="soft"> 
-                        Sign In
-                    </UButton> 
-                </NuxtLink>
+                    <NuxtLink to="/auth">
+                        <UButton color="blue" variant="soft"> 
+                            Sign In
+                        </UButton> 
+                    </NuxtLink>
+                </template>
+               
             </div>
         </div>
     </div>

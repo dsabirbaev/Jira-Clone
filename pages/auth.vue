@@ -1,11 +1,22 @@
-<script lang="ts" setup> 
+<script lang="ts" setup>
+	import { ACCOUNT } from '~/libs/appwrite';
+	import { useLoading } from '~/store/loading.store';
+
+ 
     definePageMeta({
         layout: "auth",
     })
 
     useHead({
-        title: "Auth page",
+        title: "Auth | Jira software",
     })
+
+	const router = useRouter();
+	const loadingStore = useLoading();
+	onMounted(() => {
+		ACCOUNT.get().then(() => router.push("/"))
+					 .finally(() => loadingStore.set(false))
+	})
 
     const isLogin = ref(true)
 
