@@ -18,6 +18,7 @@
 
 	const isLoading = ref(false);
 	const error = ref('');
+	
 	const state = reactive({
 		name: undefined,
 		email: undefined,

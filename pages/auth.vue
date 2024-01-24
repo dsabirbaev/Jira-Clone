@@ -14,8 +14,9 @@
 	const router = useRouter();
 	const loadingStore = useLoadingStore();
 	onMounted(() => {
-		ACCOUNT.get().then(() => router.push("/"))
-					 .finally(() => loadingStore.set(false))
+		ACCOUNT.get()
+				.then(() => router.push("/"))
+				.catch(() => loadingStore.set(false))
 	})
 
     const isLogin = ref(true)

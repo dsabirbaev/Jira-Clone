@@ -5,6 +5,7 @@
 
     const authStore = useAuthStore();
     const loadingStore = useLoadingStore();
+    
     onMounted(() => {
         ACCOUNT.get()
             .then(response =>
