@@ -12,9 +12,11 @@
 			required: true,
 		},
 	})
+
 	const toast = useToast();
 	const authStore = useAuthStore();
 	const router = useRouter();
+
 	const isLoading = ref(false);
 	const error = ref('');
 
@@ -33,9 +35,11 @@
 	async function onSubmit(event: FormSubmitEvent<any>) {
 		isLoading.value = true;
 		const { email, password } = event.data
+
 		try{
-			ACCOUNT.createEmailSession(email, password);
+			await ACCOUNT.createEmailSession(email, password);
 			const response = await ACCOUNT.get(); 
+			
 			authStore.set({
 				email: response.email,
 				id: response.$id,

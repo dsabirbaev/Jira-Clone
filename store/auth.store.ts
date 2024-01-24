@@ -1,23 +1,23 @@
-import { defineStore } from 'pinia';
+
 
 
 interface User {
-    email: "",
-    naem: "",
-    id: "",
-    status: false,
+    email: string,
+    name: string,
+    id: string,
+    status: boolean,
 }
 
 const initialState: { user: User} = {
     user: {
-        email: "",
-        naem: "",
-        id: "",
-        status: false,
-    }
+		email: '',
+		name: '',
+		id: '',
+		status: false,
+	},
 }
 
-export const useAuthStore = defineStore('alerts', {
+export const useAuthStore = defineStore('auth', {
     state: () => initialState,
 
     getters: {

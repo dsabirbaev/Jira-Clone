@@ -2,12 +2,12 @@
 
     import { ACCOUNT } from '~/libs/appwrite';
     import { useAuthStore } from '~/store/auth.store';
-    import { useLoading } from '~/store/loading.store';
+    import { useLoadingStore } from '~/store/loading.store';
 
 
     const { currentUser, clear } = useAuthStore();
     const router = useRouter();
-    const loadingStore = useLoading();
+    const loadingStore = useLoadingStore();
 
 
     const logout = async () => {

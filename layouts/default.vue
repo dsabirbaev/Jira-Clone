@@ -1,10 +1,10 @@
 <script lang="ts" setup>
     import { ACCOUNT } from '~/libs/appwrite'
     import { useAuthStore } from '~/store/auth.store';
-    import { useLoading } from '~/store/loading.store';
+    import { useLoadingStore } from '~/store/loading.store';
 
     const authStore = useAuthStore();
-    const loadingStore = useLoading();
+    const loadingStore = useLoadingStore();
     onMounted(() => {
         ACCOUNT.get()
             .then(response =>
