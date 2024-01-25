@@ -4,21 +4,33 @@
     import { useLoadingStore } from '~/store/loading.store';
     import { status } from '~/constants';
 
-    definePageMeta({
-        layout: "documents",
-    })
+    import { useAuthStore } from '~/store/auth.store';
+    import { useStatusQuery } from '~/query/use-status-query';
 
-    useHead({
-        title: "Documents | Jira software",
-    })
+    definePageMeta({ layout: "documents" })
+    useHead({ title: "Documents | Jira software" })
 
     const router = useRouter();	
     const loadingStore = useLoadingStore();
+    const authStore = useAuthStore();
+
     onMounted(() => {
-		ACCOUNT.get()
-				.then(() => loadingStore.set(false))
-				.catch(() => router.push('/auth'))
-	})
+        ACCOUNT.get()
+            .then(response => {
+                loadingStore.set(false)
+                authStore.set({
+                    email: response.email,
+                    id: response.$id,
+                    name: response.name,
+                    status: response.status
+                })
+            })
+            .catch(() => router.push('/auth'))
+    })
+
+    const { data } = useStatusQuery()
+
+    console.log(data)
 </script>
 
 <template>
