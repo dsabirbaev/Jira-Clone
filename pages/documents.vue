@@ -2,11 +2,11 @@
 <script lang="ts" setup>
     import { ACCOUNT } from '~/libs/appwrite';
     import { useLoadingStore } from '~/store/loading.store';
-    import { status } from '~/constants';
+    
 
     import { useAuthStore } from '~/store/auth.store';
     import { useStatusQuery } from '~/query/use-status-query';
-import type { card } from '@nuxt/ui';
+   
 
     definePageMeta({ layout: "documents" })
     useHead({ title: "Documents | Jira software" })
@@ -29,13 +29,26 @@ import type { card } from '@nuxt/ui';
             .catch(() => router.push('/auth'))
     })
 
-    const { data } = useStatusQuery()
+    const { data, isLoading } = useStatusQuery()
 
     
 </script>
 
 <template>
-    <div class="grid grid-cols-4 gap-2 mt-12">
+    <div v-if="!isLoading" class="grid grid-cols-4 gap-2 mt-12">
+
+        <USkeleton class="h-12 dark:bg-gray-900 bg-gray-100" />
+		<USkeleton class="h-12 dark:bg-gray-900 bg-gray-100" />
+		<USkeleton class="h-12 dark:bg-gray-900 bg-gray-100" />
+		<USkeleton class="h-12 dark:bg-gray-900 bg-gray-100" />
+
+        <UiDealsLoader />
+        <UiDealsLoader />
+        <UiDealsLoader />
+        <UiDealsLoader />
+    </div>
+
+    <div class="grid grid-cols-4 gap-2 mt-12" v-else>
         <div v-for="item in data" :key="item.id">
             <UButton class="w-full h-12" color="blue" variant="outline">
                 <div class="flex items-center space-x-2">
@@ -43,6 +56,8 @@ import type { card } from '@nuxt/ui';
                     <span class="text-sm text-neutral-500">{{ item.items.length }}</span>
                 </div>
             </UButton>
+
+            <SharedCreateDeal/>
 
             <div class="my-3 bg-gray-900 rounded-md p-2" v-for="card in item.items" :key="card.$id" role="button" draggable="true">
                 <div class="flex items-center space-x-2">
