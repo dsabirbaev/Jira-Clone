@@ -29,13 +29,13 @@
             .catch(() => router.push('/auth'))
     })
 
-    const { data, isLoading } = useStatusQuery()
+    const { data, isLoading, refetch } = useStatusQuery()
 
     
 </script>
 
 <template>
-    <div v-if="!isLoading" class="grid grid-cols-4 gap-2 mt-12">
+    <div v-if="isLoading" class="grid grid-cols-4 gap-2 mt-12">
 
         <USkeleton class="h-12 dark:bg-gray-900 bg-gray-100" />
 		<USkeleton class="h-12 dark:bg-gray-900 bg-gray-100" />
@@ -49,17 +49,17 @@
     </div>
 
     <div class="grid grid-cols-4 gap-2 mt-12" v-else>
-        <div v-for="item in data" :key="item.id">
+        <div v-for="column in data" :key="column.id">
             <UButton class="w-full h-12" color="blue" variant="outline">
                 <div class="flex items-center space-x-2">
-                    <span class="font-bold">{{ item.name }}</span>
-                    <span class="text-sm text-neutral-500">{{ item.items.length }}</span>
+                    <span class="font-bold">{{ column.name }}</span>
+                    <span class="text-sm text-neutral-500">{{ column.items.length }}</span>
                 </div>
             </UButton>
 
-            <SharedCreateDeal/>
+            <SharedCreateDeal :status="column.id" :refetch="refetch"/>
 
-            <div class="my-3 bg-gray-900 rounded-md p-2" v-for="card in item.items" :key="card.$id" role="button" draggable="true">
+            <div class="my-3 bg-gray-900 rounded-md p-2" v-for="card in column.items" :key="card.$id" role="button" draggable="true">
                 <div class="flex items-center space-x-2">
                     <span class="font-bold text-lg uppercase">{{ card.name }}</span>
                 </div>
