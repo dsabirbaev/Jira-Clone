@@ -1,37 +1,30 @@
 
 <script lang="ts" setup>
-    import { ACCOUNT } from '~/libs/appwrite';
-    import { useLoadingStore } from '~/store/loading.store';
     
-
-    import { useAuthStore } from '~/store/auth.store';
+    import { useMutation } from '@tanstack/vue-query';
+    import { COLLECTION_DEALS, DB_ID } from '~/constants';
+    import { DATABASE } from '~/libs/appwrite';
     import { useStatusQuery } from '~/query/use-status-query';
    
 
     definePageMeta({ layout: "documents" })
     useHead({ title: "Documents | Jira software" })
-
-    const router = useRouter();	
-    const loadingStore = useLoadingStore();
-    const authStore = useAuthStore();
-
-    onMounted(() => {
-        ACCOUNT.get()
-            .then(response => {
-                loadingStore.set(false)
-                authStore.set({
-                    email: response.email,
-                    id: response.$id,
-                    name: response.name,
-                    status: response.status
-                })
-            })
-            .catch(() => router.push('/auth'))
-    })
-
     const { data, isLoading, refetch } = useStatusQuery()
 
-    
+    const dragCardRef = ref(null)
+    const sourceColumnRef = ref(null)
+    const isMoving = ref(false)
+
+    const {mutate, isPending} = useMutation({
+        mutationKey: ['moveCard'],
+        mutationFn: ({ docId, status } : {docId: string, status: string}) =>
+            DATABASE.updateDocument(DB_ID, COLLECTION_DEALS, docId, {status}),
+        onSuccess: () => refetch(),
+    })
+
+    const handleDragOver = () => {
+
+    }
 </script>
 
 <template>
@@ -49,6 +42,7 @@
     </div>
 
     <div class="grid grid-cols-4 gap-2 mt-12" v-else>
+        
         <div v-for="column in data" :key="column.id">
             <UButton class="w-full h-12" color="blue" variant="outline">
                 <div class="flex items-center space-x-2">
