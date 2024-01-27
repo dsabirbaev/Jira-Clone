@@ -40,7 +40,8 @@
                             Documents
                         </UButton> 
                     </NuxtLink>
-                       
+                    
+                    <SharedUserBox/>
                 </template>
 
                 <template v-else>
