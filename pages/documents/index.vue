@@ -4,7 +4,7 @@
     import { useMutation } from '@tanstack/vue-query';
     import { COLLECTION_DEALS, DB_ID } from '~/constants';
     import { DATABASE } from '~/libs/appwrite';
-    import { useStatusQuery } from '~/query/use-status-query';
+    import { useStatusQuery } from '~/query/use-status';
     import { useCurrentDealStore } from "~/store/current-deal.store"
     import type { IColumn, IDeal } from '~/types';
    
@@ -97,4 +97,4 @@
        
         <Slideover />
     </div>
-</template>
+</template>~/query/use-status
